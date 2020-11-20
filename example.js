@@ -29,6 +29,13 @@ let questions = [
 ];
 
 (async () => {
+    const answers = await prompts(questions);
+    console.log(answers)
+})()
+
+/* const prompts = require('./');
+
+(async () => {
 
     let questionPointer = 0;
     let newQuestions = questions;
@@ -61,11 +68,8 @@ let questions = [
 
     await prompts(questions, { onCancel, onSubmit });
     console.log(`answersTotalEnd, questionPointer: ${questionPointer}`, answersTotal)
-   
-
-    // await prompts(questions);
      
-})();
+})(); */
 
 /* 'use strict';
 
