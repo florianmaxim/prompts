@@ -1,3 +1,70 @@
+const prompts = require('./');
+
+let questions = [
+    {
+        type: 'text',
+        name: 'name',
+        message: 'What is your name?',
+    },
+    {
+        type: 'number',
+        name: 'age',
+        message: 'How old are you?'
+    },
+    {
+        type: 'number',
+        name: 'height',
+        message: 'How tall are you?'
+    },
+    {
+        type: 'text',
+        name: 'location',
+        message: 'Where do you live?'
+    },
+    {
+        type: 'text',
+        name: 'favorite',
+        message: 'What do you like?'
+    },
+];
+
+(async () => {
+
+    let questionPointer = 0;
+    let newQuestions = questions;
+
+    let answersTotal = {};
+    
+    const onCancel = async (prompt, answersSoFar) => {
+
+        // Delete previous answer 
+        const keys = Object.keys(answersSoFar)
+        delete answersSoFar[keys[keys.length-1]]
+
+        // Remove previous questions
+        newQuestions = questions.filter((question, index) => {
+            if (index >= questionPointer - 1) { return question; }
+        })
+
+        answersTotal = {...answersTotal, ...answersSoFar}  
+        // console.log(`answersTotalOnCancel, questionPointer: ${questionPointer}`, answersTotal)
+        questionPointer -= 1;
+    
+        await prompts(newQuestions,  { onCancel, onSubmit });
+    }
+
+    const onSubmit = (prompt, answer, answersSoFar) => { 
+        answersTotal = {...answersTotal, ...answersSoFar}
+        // console.log(`answersTotalOnSubmit, questionPointer: ${questionPointer}`, answersTotal)
+        questionPointer += 1;
+    } 
+
+    await prompts(questions, { onCancel, onSubmit });
+    console.log(`answersTotalEnd, questionPointer: ${questionPointer}`, answersTotal)
+     
+})();
+
+/* 
 'use strict';
 
 const { prompt } = require('./');
@@ -113,4 +180,4 @@ let interval;
 function cleanup() {
     clearInterval(interval);
 }
-
+ */
